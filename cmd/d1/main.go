@@ -2027,5 +2027,8 @@ func parseInput(input string) []int {
 }
 
 func main() {
+
 	log.Printf("Part 1: %d", doPart1())
+
+	log.Printf("Part 2: %d", doPart2())
 }
