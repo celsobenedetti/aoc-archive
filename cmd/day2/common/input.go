@@ -1,6 +1,6 @@
-package main
+package common
 
-var input = []string{
+var Input = []string{
 	"forward 1",
 	"forward 8",
 	"down 9",
