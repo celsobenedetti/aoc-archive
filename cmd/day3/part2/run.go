@@ -7,7 +7,7 @@ import (
 	"github.com/celso-patiri/aoc/cmd/day3/common"
 )
 
-func stringToArr(s string) []string {
+func strToArr(s string) []string {
 	return strings.Split(s, "")
 }
 
@@ -16,7 +16,7 @@ func evaluateBitFrequency(input []string) (result []string) {
 
 	for _, line := range input {
 
-		for i, char := range stringToArr(line) {
+		for i, char := range strToArr(line) {
 			if char == "1" {
 				frequency[i]++
 			} else {
@@ -36,25 +36,26 @@ func evaluateBitFrequency(input []string) (result []string) {
 	return result
 }
 
-func findRating(input []string, bit int, frequency []string, mostCommon bool) (remaining []string) {
-	filter := frequency[bit]
-
+func findRating(input []string, bit int, mostCommon bool) (remaining []string) {
 	if len(input) == 1 {
 		return input
 	}
 
+	frequency := evaluateBitFrequency(input)
+	filter := frequency[bit]
+
 	for _, line := range input {
-		chars := stringToArr(line)
+		chars := strToArr(line)
 
 		if (chars[bit] == filter && mostCommon) || (chars[bit] != filter && !mostCommon) {
 			remaining = append(remaining, line)
 		}
 	}
 
-	return findRating(remaining, bit+1, frequency, mostCommon)
+	return findRating(remaining, bit+1, mostCommon)
 }
 
-func convertRate(rate string) int {
+func convertRating(rate string) int {
 	rateNumber, err := strconv.ParseInt(rate, 2, 64)
 
 	if err != nil {
@@ -64,16 +65,22 @@ func convertRate(rate string) int {
 	return int(rateNumber)
 }
 
+func getRating(name string) int {
+	var rating string
+
+	if name == "oxigen" {
+		rating = findRating(common.Input, 0, true)[0]
+	} else {
+		rating = findRating(common.Input, 0, false)[0]
+	}
+
+	return convertRating(rating)
+}
+
 func Run() int {
-	input := common.DebugInput
 
-	frequency := evaluateBitFrequency(input)
+	oxigenRating := getRating("oxigen")
+	co2Rating := getRating("co2")
 
-	oxigenRating := findRating(input, 0, frequency, true)[0]
-	co2Rating := findRating(input, 0, frequency, false)[0]
-
-	a := convertRate(oxigenRating)
-	b := convertRate(co2Rating)
-
-	return a * b
+	return oxigenRating * co2Rating
 }
