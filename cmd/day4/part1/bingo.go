@@ -1,17 +1,54 @@
 package part1
 
 import (
+	"fmt"
+
 	"github.com/celso-patiri/aoc/cmd/day4/common"
 )
 
-func computeDraftedNumber(draft int) {}
-func checkWin(row, col int)          {}
+func computeDraftedNumber(draft int) int {
+	occurences := common.InputMap[draft]
 
-func Run() common.BingoInput {
+	for _, ocurrence := range occurences {
+		board, i, j := ocurrence.Board, ocurrence.Row, ocurrence.Column
+		common.BingoCheck.CheckElement(board, i, j)
 
-	for _, number := range common.Input.Numbers {
-		computeDraftedNumber(number)
+		if common.BingoCheck[board].IsVictory(i, j) {
+			return board
+		}
 	}
 
-	return common.Input
+	return -1
+}
+
+func calculateWin(boardIndex int) int {
+	board := common.Input.Boards[boardIndex]
+	checkBoard := common.BingoCheck[boardIndex]
+
+	uncheckedSum := 0
+
+	for i := 0; i < 5; i++ {
+
+		fmt.Println(board[i])
+		for j := 0; j < 5; j++ {
+			if !checkBoard[i][j] {
+				uncheckedSum += board[i][j]
+			}
+		}
+	}
+
+	return uncheckedSum
+}
+
+func Run() int {
+
+	for _, number := range common.Input.Numbers {
+		boardIndex := computeDraftedNumber(number)
+
+		if boardIndex >= 0 {
+			return calculateWin(boardIndex) * number
+		}
+	}
+
+	return -1
 }

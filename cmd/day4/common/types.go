@@ -8,7 +8,7 @@ type BingoInput struct {
 	Boards  []Board
 }
 
-type bingoItem struct {
+type BingoItem struct {
 	Board  int
 	Row    int
 	Column int
@@ -16,8 +16,9 @@ type bingoItem struct {
 
 type CheckRow []bool
 type CheckBoard []CheckRow
+type CheckMatrix []CheckBoard
 
-type mappedItems []bingoItem
+type mappedItems []BingoItem
 type BingoMap map[int]mappedItems
 
 // Receiver functions
@@ -36,6 +37,25 @@ func (row *Row) addElement(n int) {
 
 func (bingoMap BingoMap) addItem(item, board, row, column int) {
 	mappedItems := bingoMap[item]
-	mappedItems = append(mappedItems, bingoItem{board, row, column})
+	mappedItems = append(mappedItems, BingoItem{board, row, column})
 	bingoMap[item] = mappedItems
+}
+
+func (bingoCheck CheckMatrix) CheckElement(board, row, column int) {
+	bingoCheck[board][row][column] = true
+}
+
+func (board CheckBoard) IsVictory(row, column int) bool {
+	rowIsComplete, columnIsComplete := true, true
+
+	for i := 0; i < 5; i++ {
+		rowIsComplete = rowIsComplete && board[row][i]
+		columnIsComplete = columnIsComplete && board[i][column]
+	}
+
+	return rowIsComplete || columnIsComplete
+}
+
+func (bingoCheck *CheckMatrix) makeNewboard() {
+	*bingoCheck = append(*bingoCheck, MakeCheckBoard())
 }
