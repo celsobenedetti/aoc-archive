@@ -21,6 +21,11 @@ type CheckMatrix []CheckBoard
 type mappedItems []BingoItem
 type BingoMap map[int]mappedItems
 
+type CheckStructure struct {
+	DoneBoards CheckRow
+	Boards     CheckMatrix
+}
+
 // Receiver functions
 
 func (bingo *BingoInput) makeNewBoard() {
@@ -58,4 +63,18 @@ func (board CheckBoard) IsVictory(row, column int) bool {
 
 func (bingoCheck *CheckMatrix) makeNewboard() {
 	*bingoCheck = append(*bingoCheck, MakeCheckBoard())
+}
+
+func (checkRow *CheckRow) addElement() {
+	*checkRow = append(*checkRow, false)
+}
+
+func (checkStructure CheckStructure) CountWins() (count int) {
+	for _, done := range checkStructure.DoneBoards {
+		if done {
+			count++
+		}
+
+	}
+	return count
 }

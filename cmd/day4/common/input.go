@@ -7,10 +7,12 @@ import (
 var Input = parseInput(debugInput)
 var InputMap BingoMap = make(BingoMap)
 var BingoCheck CheckMatrix = make(CheckMatrix, 0)
+var BingoCheckPart2 CheckStructure = CheckStructure{make(CheckRow, 1), make(CheckMatrix, 0)}
 
 func parseInput(input string) (bingo BingoInput) {
 	bingo.makeNewBoard()
 	BingoCheck.makeNewboard()
+	BingoCheckPart2.Boards.makeNewboard()
 
 	lines := strings.Split(input, "\n")
 	bingo.Numbers = ParseInputNumbers(lines[1])
@@ -22,6 +24,8 @@ func parseInput(input string) (bingo BingoInput) {
 		if line == "" {
 			bingo.makeNewBoard()
 			BingoCheck.makeNewboard()
+			BingoCheckPart2.Boards.makeNewboard()
+			BingoCheckPart2.DoneBoards.addElement()
 
 			boardIndex++
 			currentBoardLine = 0
@@ -38,6 +42,7 @@ func parseInput(input string) (bingo BingoInput) {
 			currentBoardLine++
 		}
 	}
+
 	return bingo
 }
 

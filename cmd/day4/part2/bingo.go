@@ -1,4 +1,4 @@
-package part1
+package part2
 
 import (
 	"github.com/celso-patiri/aoc/cmd/day4/common"
@@ -9,10 +9,16 @@ func computeDraftedNumber(draft int) int {
 
 	for _, ocurrence := range occurences {
 		board, i, j := ocurrence.Board, ocurrence.Row, ocurrence.Column
-		common.BingoCheck.CheckElement(board, i, j)
+		common.BingoCheckPart2.Boards.CheckElement(board, i, j)
 
-		if common.BingoCheck[board].IsVictory(i, j) {
-			return board
+		if common.BingoCheckPart2.Boards[board].IsVictory(i, j) {
+			common.BingoCheckPart2.DoneBoards[board] = true
+
+			if common.BingoCheckPart2.CountWins() == len(common.BingoCheckPart2.DoneBoards) {
+				return board
+			} else {
+				continue
+			}
 		}
 	}
 
@@ -21,7 +27,7 @@ func computeDraftedNumber(draft int) int {
 
 func calculateWin(boardIndex int) int {
 	board := common.Input.Boards[boardIndex]
-	checkBoard := common.BingoCheck[boardIndex]
+	checkBoard := common.BingoCheckPart2.Boards[boardIndex]
 
 	uncheckedSum := 0
 
