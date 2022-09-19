@@ -3,10 +3,11 @@ package main
 import (
 	"fmt"
 	"github.com/celso-patiri/aoc/cmd/common"
-	day5 "github.com/celso-patiri/aoc/cmd/day5/common"
+	part1 "github.com/celso-patiri/aoc/cmd/day5/part1"
+	part2 "github.com/celso-patiri/aoc/cmd/day5/part2"
 )
 
-var input = "input.txt"
+var inputFile = "input.txt"
 var debugInput = `0,9 -> 5,9
 8,0 -> 0,8
 9,4 -> 3,4
@@ -19,7 +20,10 @@ var debugInput = `0,9 -> 5,9
 5,5 -> 8,2`
 
 func main() {
-	_, count := day5.ParseInput(common.ReadInputFile(input))
+	input := common.ReadInputFile(inputFile)
+	_, count1 := part1.Run(input)
+	_, count2 := part2.Run(input)
 
-	fmt.Println("Part 1: ", count)
+	fmt.Println("Part 1: ", count1)
+	fmt.Println("Part 2: ", count2)
 }
