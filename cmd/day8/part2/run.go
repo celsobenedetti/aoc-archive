@@ -1,6 +1,8 @@
 package part2
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func Run(input string) (result int) {
 	codes, output := ParseInput(input)
