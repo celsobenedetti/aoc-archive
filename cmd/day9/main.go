@@ -5,6 +5,7 @@ import (
 	file "github.com/celso-patiri/aoc/cmd/common"
 	"github.com/celso-patiri/aoc/cmd/day9/common"
 	"github.com/celso-patiri/aoc/cmd/day9/part1"
+	"github.com/celso-patiri/aoc/cmd/day9/part2"
 )
 
 var debugInput = `2199943210
@@ -21,5 +22,7 @@ func main() {
 	inputString := file.ReadInputFile(fileName)
 	input := common.ParseInput(inputString)
 
-	fmt.Println("Part 1: ", part1.Run(input))
+	part1, lowPoints := part1.Run(input)
+	fmt.Println("Part 1: ", part1)
+	fmt.Println("Part 2: ", part2.Run(lowPoints, input))
 }

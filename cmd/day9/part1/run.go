@@ -6,8 +6,8 @@ import (
 
 type Point = common.Point
 
-func Run(matrix [][]int) (sum int) {
-	lowPoints := make([]common.Point, 0)
+func Run(matrix [][]int) (sum int, lowPoints []Point) {
+	lowPoints = make([]common.Point, 0)
 	lines := len(matrix) - 1
 	rows := len(matrix[0]) - 1
 
