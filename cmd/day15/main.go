@@ -16,8 +16,9 @@ func main() {
 	fmt.Println("[Graph Impl]Part 1:", part1GraphImpl)
 
 	m1 := matrix.ParseInput(input, 1)
-	m2 := matrix.ParseInput(matrix.DebugInput, 5)
+	m2 := matrix.ParseInput(input, 5)
 
 	fmt.Println("[Matrix Impl]Part 1: ", m1.CalculateRisk())
 	fmt.Println("[Matrix Impl]Part 2: ", m2.CalculateRisk())
+
 }

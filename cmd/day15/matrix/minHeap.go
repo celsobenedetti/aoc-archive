@@ -1,7 +1,12 @@
 package matrix
 
 type MinHeap struct {
-	list []*Node
+	list   []*Node
+	length int
+}
+
+func CreateHeap(n int) MinHeap {
+	return MinHeap{list: make([]*Node, n), length: 0}
 }
 
 func (h MinHeap) At(i int) *Node {
@@ -25,17 +30,17 @@ func (h *MinHeap) swap(parent, child int) {
 }
 
 func (h *MinHeap) heapifyDown(i int) {
-	if i >= len(h.list) {
+	if i >= h.length {
 		return
 	}
 
 	leftIdx, rightIdx := h.LeftChild(i), h.RightChild(i)
 
-	if rightIdx >= len(h.list) || leftIdx >= len(h.list) {
+	if rightIdx >= h.length || leftIdx >= h.length {
 		return
 	}
 
-	leftValue, rightValue, currValue := h.At(leftIdx).Weight, h.At(rightIdx).Weight, h.At(i).Weight
+	leftValue, rightValue, currValue := h.At(leftIdx).Dist, h.At(rightIdx).Dist, h.At(i).Dist
 
 	if leftValue >= rightValue && currValue >= rightValue {
 		h.swap(i, rightIdx)
@@ -52,27 +57,33 @@ func (h *MinHeap) heapifyUp(i int) {
 		return
 	}
 	parent := h.Parent(i)
-	if h.At(i).Weight < h.At(parent).Weight {
+	if h.At(i).Dist < h.At(parent).Dist {
 		h.swap(parent, i)
 		h.heapifyUp(parent)
 	}
 }
 
 func (h *MinHeap) Insert(node *Node) {
-	h.list = append(h.list, node)
-	h.heapifyUp(len(h.list) - 1)
+	if len(h.list) == h.length {
+		h.list = append(h.list, make([]*Node, h.length)...)
+	}
+
+	h.list[h.length] = node
+	h.length++
+	h.heapifyUp(h.length - 1)
 }
 
 func (h *MinHeap) Pop() *Node {
-	if len(h.list) == 0 {
+	if h.length == 0 {
 		return nil
 	}
 
 	node := h.At(0)
 
-	lastIndex := len(h.list) - 1
-	h.list[0] = h.list[lastIndex]
-	h.list = h.list[:lastIndex]
+	lastIndex := h.length - 1
+	h.swap(0, lastIndex)
+	h.list[lastIndex] = nil
+	h.length--
 
 	h.heapifyDown(0)
 	return node

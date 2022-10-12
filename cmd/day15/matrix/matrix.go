@@ -1,12 +1,13 @@
 package matrix
 
-import "math"
+import (
+	"fmt"
+)
 
 type Node struct {
 	Weight   int
 	Prev     *Node
 	Dist     int
-	Seen     bool
 	Position Point
 }
 
@@ -42,27 +43,11 @@ func (m Matrix) getAdjacentNodes(p Point) (adj []*Node) {
 	return
 }
 
-func (m Matrix) hasUnvisitedNode() bool {
+func (m Matrix) PrintMatrix() {
 	for _, row := range m {
 		for _, node := range row {
-			if !node.Seen && node.Dist < math.MaxInt {
-				return true
-			}
+			fmt.Printf("%d ", node.Weight)
 		}
+		fmt.Println("")
 	}
-	return false
-}
-
-func (m Matrix) getNearestUnseenNode() (node *Node, point Point) {
-	min := math.MaxInt
-
-	for i, row := range m {
-		for j, node := range row {
-			if !node.Seen && node.Dist < min {
-				min = node.Dist
-				point.I, point.J = i, j
-			}
-		}
-	}
-	return m.At(point), point
 }

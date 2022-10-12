@@ -1,19 +1,22 @@
 package matrix
 
 func (m Matrix) shortestPath(source, target Point) (path []Node) {
+	heap := CreateHeap(2000)
 
 	m.At(source).Dist = 0
+	heap.Insert(m.At(source))
 
-	for m.hasUnvisitedNode() {
-		currNode, currPoint := m.getNearestUnseenNode()
-		currNode.Seen = true
+	for heap.length > 0 {
 
-		for _, edge := range m.getAdjacentNodes(currPoint) {
+		currNode := heap.Pop()
+
+		for _, edge := range m.getAdjacentNodes(currNode.Position) {
 			dist := currNode.Dist + edge.Weight
 
 			if dist < edge.Dist {
 				edge.Prev = currNode
 				edge.Dist = dist
+				heap.Insert(edge)
 			}
 		}
 	}
@@ -23,10 +26,6 @@ func (m Matrix) shortestPath(source, target Point) (path []Node) {
 	for curr.Prev != nil {
 		path = append(path, *curr)
 		curr = curr.Prev
-	}
-
-	for i, j := 0, len(path)-1; i < j; i, j = i+1, j-1 {
-		path[i], path[j] = path[j], path[i]
 	}
 
 	return
