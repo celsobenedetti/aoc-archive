@@ -1,6 +1,9 @@
 import day1.run as day1
+import day2.run as day2
 
-part1, part2 = day1.run()
+# d1p1, d1p2 = day1.run()
+# print("Day1: ", d1p1, ' | ', d1p2)
 
-print("Day1 - Part 1: ", part1)
-print("Day2 - Part 2: ", part2)
+d2p1, d2p2 = day2.run()
+print("Day2: ", d2p1, ' | ', d2p2)
+
