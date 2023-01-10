@@ -15,6 +15,14 @@ class Stack(Generic[T]):
     def pop(self) -> T:
         return self.stack.pop()
 
+    def pushMany(self, data: list[T]):
+        self.stack.extend(data)
+
+    def popMany(self, amount: int):
+        result = self.stack[-amount:]
+        self.stack = self.stack[:-amount]
+        return result
+
     def getTop(self) -> T:
         return self.stack[-1]
 
