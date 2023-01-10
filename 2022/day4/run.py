@@ -1,5 +1,7 @@
 from common import input  # type: ignore[attr-defined]
 from functools import reduce
+from typing import Callable
+
 
 debugInput = """2-4,6-8
 2-3,4-5
@@ -9,26 +11,38 @@ debugInput = """2-4,6-8
 2-6,4-8"""
 
 ElfSections = list[str]
-Pair = tuple[ElfSections, ElfSections]
+ElfPair = tuple[ElfSections, ElfSections]
 
 
-def getPairs(inputString: str) -> list[Pair]:
+def getPairs(inputString: str) -> list[ElfPair]:
     elfs = [line.split(",") for line in inputString.splitlines()]
     pairs = [(elf[0].split("-"), elf[1].split("-")) for elf in elfs]
     return pairs
 
 
-def pairsCompletelyOverlap(pair: Pair) -> bool:
+def pairCompletelyOverlaps(pair: ElfPair) -> bool:
     elf1, elf2 = pair[0], pair[1]
-    oneContainsTwo = int(elf1[0]) <= int(elf2[0]) and int(elf1[1]) >= int(elf2[1])
-    twoContainsOne = int(elf2[0]) <= int(elf1[0]) and int(elf2[1]) >= int(elf1[1])
+    e1p1, e1p2 = int(elf1[0]), int(elf1[1])
+    e2p1, e2p2 = int(elf2[0]), int(elf2[1])
+    oneContainsTwo = e1p1 <= e2p1 and e1p2 >= e2p2
+    twoContainsOne = e2p1 <= e1p1 and e2p2 >= e1p1
     return oneContainsTwo or twoContainsOne
 
 
-def countCompleteOverlaps(pairs: list[Pair]) -> int:
+def pairOverlaps(pair: ElfPair) -> bool:
+    elf1, elf2 = pair[0], pair[1]
+    bordersOverlap = elf1[0] == elf2[0] or elf1[1] == elf2[1]
+    oneBeforeTwo = elf1[0] <= elf2[0] and elf1[1] >= elf2[0]
+    twoBeforeOne = elf2[0] <= elf1[0] and elf2[1] >= elf1[0]
+    return (
+        bordersOverlap or oneBeforeTwo or twoBeforeOne or pairCompletelyOverlaps(pair)
+    )
+
+
+def countOverlaps(pairs: list[ElfPair], pairOverlaps: Callable[[ElfPair], bool]) -> int:
     return reduce(
         lambda overlapCount, pair: overlapCount + 1
-        if pairsCompletelyOverlap(pair)
+        if pairOverlaps(pair)
         else overlapCount,
         pairs,
         0,
@@ -38,8 +52,10 @@ def countCompleteOverlaps(pairs: list[Pair]) -> int:
 def run():
     inputStr = input.readFile("day4/input.txt")
     pairs = getPairs(inputStr)
-    p1 = countCompleteOverlaps(pairs)
-    return p1, 0
+    p1 = countOverlaps(pairs, pairCompletelyOverlaps)
+    p2 = countOverlaps(pairs, pairOverlaps)
 
-
-run()
+    for pair in pairs:
+        if pairOverlaps(pair):
+            print(pair)
+    return p1, p2
